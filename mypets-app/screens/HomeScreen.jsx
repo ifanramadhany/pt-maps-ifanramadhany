@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { Text, StyleSheet, View, Image, ScrollView, RefreshControl, TouchableHighlight, Pressable, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Ionicons";
+import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon, SearchBar } from "react-native-elements";
 import { ButtonCategories, CardHighlight, CardPopular } from './components';
 
@@ -52,7 +52,7 @@ export default function HomeScreen({navigation}) {
         >
         <View style={styles.logo}>
           <View style={{marginLeft: 15}}>
-            <Icon
+            <Ionicons
               name="menu-outline"
               size={30}
               color="#111827"
@@ -98,8 +98,8 @@ export default function HomeScreen({navigation}) {
                 placeholder="Search Pet Food"
                 placeholderTextColor="#9CA3AF"
                 leftIcon={
-                  <Icon
-                    name="search-outline"
+                  <FontAwesome
+                    name="search"
                     size={24}
                     color="#9CA3AF"
                     style={{ marginRight: 10 }}

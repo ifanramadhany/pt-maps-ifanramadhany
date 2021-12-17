@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SignIn, SignUp, HomeScreen } from "./screens";
+import { SignIn, SignUp, HomeScreen, DogCategory } from "./screens";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -12,6 +12,7 @@ export default function App() {
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="DogCategory" component={DogCategory} />
         </Stack.Navigator>
       </NavigationContainer>
   );

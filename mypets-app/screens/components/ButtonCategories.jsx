@@ -8,7 +8,7 @@ export default function ButtonCategories({navigation, item}) {
     <TouchableHighlight
       underlayColor="#0ACF83"
       style={isPress ? styles.itemPetsActive : styles.itemPets}
-      onPress={() => navigation.navigate("ExploreProducts")}
+      onPress={() => navigation.navigate("DogCategory")}
       onPressIn={() => setIsPress(true)}
       onPressOut={() => setIsPress(false)}
     >
