@@ -1,3 +1,7 @@
 export { default as ButtonCategories } from "./ButtonCategories"
 export { default as CardHighlight } from "./CardHighlight"
 export { default as CardPopular } from "./CardPopular"
+export { default as ItemDog } from "./ItemDog"
+export { default as ItemBreed } from "./ItemBreed"
+export { default as ItemImage } from "./ItemImage"
+export { default as ModalDetail } from "./ModalDetail"

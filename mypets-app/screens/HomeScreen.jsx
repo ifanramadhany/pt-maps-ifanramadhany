@@ -141,7 +141,7 @@ export default function HomeScreen({navigation}) {
               <CardHighlight></CardHighlight>
               <CardHighlight></CardHighlight>
               <CardHighlight></CardHighlight>
-              
+              <CardHighlight></CardHighlight>
               
             </ScrollView>
           </View>
@@ -159,6 +159,8 @@ export default function HomeScreen({navigation}) {
               contentContainerStyle={{display: 'flex', alignItems: 'center', marginLeft: 20}}
               horizontal={true}
             >
+              <CardPopular></CardPopular>
+              <CardPopular></CardPopular>
               <CardPopular></CardPopular>
               <CardPopular></CardPopular>
               <CardPopular></CardPopular>

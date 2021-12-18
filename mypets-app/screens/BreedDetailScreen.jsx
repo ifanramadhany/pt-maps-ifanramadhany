@@ -14,16 +14,16 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, Ionicons } from "react-native-vector-icons";
 import { Input, SocialIcon, SearchBar } from "react-native-elements";
-import { ItemDog } from "./components";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchDogs, clearAllSearch, searchByName } from "../store/actions/dogAction";
+import { fetchBreeds } from "../store/actions/dogAction";
 import { UIActivityIndicator } from "react-native-indicators";
+import { ItemBreed } from "./components";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-export default function DogCategory({ navigation }) {
+export default function BreedDetailScreen({ navigation, route }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
@@ -32,38 +32,15 @@ export default function DogCategory({ navigation }) {
   }, []);
 
   const dispatch = useDispatch();
-  const { dogs, isLoading, isError } = useSelector((state) => state.dogState);
+  const { breeds, isLoading, isError } = useSelector((state) => state.dogState);
   const [loaderLoading, setLoaderLoading] = useState(false);
 
-  // console.log(dogs);
+  // console.log(breeds);
 
-  const [searchData, setSearchData] = useState({
-    search_by_name: "",
-  });
-
-  const onChangeSearchData = (val, key) => {
-    const newObj = { ...searchData };
-    newObj[key] = val;
-    setSearchData(newObj);
-  };
-
-  const searchDataByNameHandler = () => {
-    // console.log(searchData.search_by_name);
-    dispatch(searchByName(searchData.search_by_name))
-  };
-
-  const clearSearchHandler = () => {
-    dispatch(clearAllSearch());
-    setSearchData({
-      search_by_name: "",
-    });
-  };
 
   useEffect(() => {
-    dispatch(fetchDogs());
+    dispatch(fetchBreeds(route.params.dogName));
   }, []);
-
-  //<View style={styles.endedWrapperCardDog}></View>
 
   const renderLoader = () => {
     return (
@@ -78,12 +55,23 @@ export default function DogCategory({ navigation }) {
     );
   };
 
+  const renderDataEmpty = () => {
+    if (breeds.length != 0 ) return null
+    return (
+      <View style={styles.dataEmpty}>
+        <Text style={{fontSize: 21, fontStyle: 'italic', fontWeight: 'bold', color: '#0ACF83'}}>This Dog has no breed</Text>
+      </View>
+    )
+  }
+
   const loadMoreItem = () => {
     setLoaderLoading(true);
     setTimeout(() => {
       setLoaderLoading(false);
     }, 1000);
   };
+
+  
 
   return (
     <SafeAreaView style={{ backgroundColor: "white" }}>
@@ -96,9 +84,6 @@ export default function DogCategory({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.mainPopular}>
-        <Text style={{ fontSize: 22, marginLeft: 20, marginTop: 10 }}>
-          Pets
-        </Text>
         <Text
           style={{
             fontSize: 30,
@@ -108,40 +93,9 @@ export default function DogCategory({ navigation }) {
             marginBottom: 20,
           }}
         >
-          Dog Category
+          Breeds of {route.params.dogName}
         </Text>
-        <View>
-          <View activeOpacity={0.7} style={styles.inputSearch}>
-            <Input
-              inputContainerStyle={{ borderBottomWidth: 0 }}
-              inputStyle={{ fontSize: 15 }}
-              placeholder="Search Dog"
-              placeholderTextColor="#9CA3AF"
-              value={searchData.search_by_name}
-              onChangeText={(val) => onChangeSearchData(val, "search_by_name")}
-              leftIcon={
-                <TouchableOpacity onPress={searchDataByNameHandler}>
-                  <FontAwesome
-                    name="search"
-                    size={24}
-                    color="#9CA3AF"
-                    style={{ marginRight: 10 }}
-                  />
-                </TouchableOpacity>
-              }
-              rightIcon={
-                <TouchableOpacity onPress={clearSearchHandler}>
-                  <FontAwesome
-                    name="times"
-                    size={24}
-                    color="#9CA3AF"
-                    style={{ marginRight: 10 }}
-                  />
-                </TouchableOpacity>
-              }
-            />
-          </View>
-        </View>
+        <View></View>
         {isError ? (
           <View style={styles.whenError}>
             <Text style={{ fontSize: 20, color: "#DC2626" }}>
@@ -153,26 +107,23 @@ export default function DogCategory({ navigation }) {
           <UIActivityIndicator color="#2c3e50" size={80} />
         ) : (
           <>
-            {/* Item dog  */}
+            {/* Item breed variant  */}
             <FlatList
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
               style={styles.allCard}
-              contentContainerStyle={{ display: "flex", alignItems: "center" }}
-              data={dogs}
-              renderItem={({ item, index }) => (
-                <ItemDog
-                  item={item}
-                  id={index + 1}
-                  navigation={navigation}
-                ></ItemDog>
-              )}
+              columnWrapperStyle={styles.row}
+              data={breeds}
+              renderItem={({ item }) => <ItemBreed item={item}></ItemBreed>}
+              numColumns={2}
               keyExtractor={(item, index) => index}
+              ListHeaderComponent={renderDataEmpty}
               ListFooterComponent={renderLoader}
-              onEndReached={loadMoreItem}
-              onEndReachedThreshold={0}
-            ></FlatList>
+              
+            >
+              <View style={styles.endedWrapperCardDog}></View>
+            </FlatList>
           </>
         )}
       </View>
@@ -181,6 +132,16 @@ export default function DogCategory({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  dataEmpty: {
+    // backgroundColor: 'green',
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  row: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
   loaderStyle: {
     marginVertical: 15,
     alignItems: "center",
@@ -192,19 +153,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   endedWrapperCardDog: {
-    width: "85%",
+    // backgroundColor: "green",
+    width: "100%",
     height: 20,
     marginTop: 15,
-  },
-  inputSearch: {
-    // backgroundColor: "blue",
-    width: "90%",
-    borderRadius: 15,
-    borderColor: "#9CA3AF",
-    borderWidth: 1,
-    height: 50,
-    marginHorizontal: 18,
-    marginBottom: 15,
   },
   containerCard: {
     backgroundColor: "yellow",
